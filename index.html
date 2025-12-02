@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fsociety-organization</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+    <!-- MATRIX BACKGROUND -->
+    <canvas id="matrix"></canvas>
+
+    <header class="header">
+        <h1>fsociety-organization — inventory</h1>
+
+        <div class="nav-buttons">
+            <button onclick="toggleWindow('tools')">Tools</button>
+            <button onclick="toggleWindow('upload')">Upload</button>
+            <button onclick="toggleWindow('docs')">Docs</button>
+            <button onclick="toggleWindow('settings')">Settings</button>
+        </div>
+    </header>
+
+
+    <!-- ========== WINDOWS ========== -->
+
+    <!-- TOOLS (REQUIERE CONTRASEÑA) -->
+    <div id="tools" class="window hidden" aria-hidden="true" role="dialog">
+        <div class="window-content">
+            <h2>Tools — Inventario</h2>
+            <button class="close-btn" onclick="toggleWindow('tools')" aria-label="Cerrar ventana Tools">X</button>
+
+            <div id="tools-locked">
+                <p>Introduce la contraseña maestra:</p>
+                <input type="password" id="passwordInput" placeholder="Contraseña" />
+                <button onclick="unlockTools()">Desbloquear</button>
+                <p id="passwordError" class="error"></p>
+            </div>
+
+            <div id="tools-content" class="hidden">
+                <div class="tools-actions">
+                    <input id="searchInput" placeholder="Buscar por nombre, tag o categoría" oninput="renderTools()" />
+                    <button onclick="exportAll()">Exportar JSON</button>
+                    <button onclick="clearAll()">Borrar todo (IndexedDB)</button>
+                </div>
+
+                <p>Inventario interno:</p>
+                <ul id="toolsList" class="tools-list"></ul>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- UPLOAD WINDOW -->
+    <div id="upload" class="window hidden" aria-hidden="true" role="dialog">
+        <div class="window-content">
+            <h2>Subir archivo y clasificar</h2>
+            <button class="close-btn" onclick="toggleWindow('upload')">X</button>
+
+            <form id="uploadForm">
+                <label>Archivo:
+                    <input type="file" id="fileInput" accept="*/*" />
+                </label>
+
+                <label>Nombre (para inventario):
+                    <input type="text" id="toolName" />
+                </label>
+
+                <label>Versión:
+                    <input type="text" id="toolVersion" />
+                </label>
+
+                <label>Categoría:
+                    <select id="toolCategory">
+                        <option value="">-- Selecciona --</option>
+                        <option>Reconocimiento / Escaneo</option>
+                        <option>Análisis de Malware</option>
+                        <option>Sniffing / Network</option>
+                        <option>Explotación Interna</option>
+                        <option>Post-Explotación</option>
+                        <option>APKs internas</option>
+                        <option>Documentación</option>
+                        <option>Otros</option>
+                    </select>
+                </label>
+
+                <label>Descripción:
+                    <textarea id="toolDescription" rows="4"></textarea>
+                </label>
+
+                <label>Tags (coma-separados):
+                    <input type="text" id="toolTags" placeholder="nmap,scan,internal" />
+                </label>
+
+                <label>Autor / Equipo:
+                    <input type="text" id="toolAuthor" />
+                </label>
+
+                <div class="form-actions">
+                    <button type="submit">Subir y Clasificar</button>
+                    <button type="button" onclick="toggleWindow('upload')">Cancelar</button>
+                </div>
+
+                <div class="note">Nota: todo se guarda en IndexedDB del navegador. Si borras los datos del navegador, se perderá el inventario.</div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- DOCS -->
+    <div id="docs" class="window hidden" aria-hidden="true" role="dialog">
+        <div class="window-content">
+            <h2>Documentación interna</h2>
+            <button class="close-btn" onclick="toggleWindow('docs')">X</button>
+            <p>Aquí puedes poner manuales o guías futuras…</p>
+        </div>
+    </div>
+
+
+    <!-- SETTINGS -->
+    <div id="settings" class="window hidden" aria-hidden="true" role="dialog">
+        <div class="window-content">
+            <h2>Settings</h2>
+            <button class="close-btn" onclick="toggleWindow('settings')">X</button>
+            <p>Opciones futuras de configuración…</p>
+            <p class="small">La contraseña maestra es validada en el cliente (modo local). Si necesitas mayor seguridad, el siguiente paso sería un backend en FastAPI.</p>
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
